@@ -31,12 +31,15 @@ public class GetListBrandQuery : IRequest<GetListResponse<GetListBrandListItemDt
         public async Task<GetListResponse<GetListBrandListItemDto>> Handle(GetListBrandQuery request, CancellationToken cancellationToken)
         {
             Paginate<Brand> brands = await _brandRepository.GetListAsync(
-                   index: request.PageRequest.PageIndex,
-                   size: request.PageRequest.PageSize,
-                   cancellationToken: cancellationToken
-                   );
+                index: request.PageRequest.PageIndex,
+                size: request.PageRequest.PageSize,
+                cancellationToken: cancellationToken,
+                withDeleted: true
+                );
+
             GetListResponse<GetListBrandListItemDto> response = _mapper.Map<GetListResponse<GetListBrandListItemDto>>(brands);
             return response;
+
 
         }
     }

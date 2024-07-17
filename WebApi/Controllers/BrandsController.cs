@@ -23,7 +23,6 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-
         public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
         {
             GetListBrandQuery getListBrandQuery = new() { PageRequest = pageRequest };
