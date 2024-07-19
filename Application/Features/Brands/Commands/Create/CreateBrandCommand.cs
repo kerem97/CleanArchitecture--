@@ -1,6 +1,8 @@
 ﻿using Application.Features.Brands.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Caching;
+using Core.Application.Pipelines.Transaction;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -11,9 +13,13 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Brands.Commands.Create;
 
-public class CreateBrandCommand : IRequest<CreatedBrandResponse>
+public class CreateBrandCommand : IRequest<CreatedBrandResponse>, ITransactionalRequest, ICacheRemoverRequest
 {
     public string Name { get; set; }
+
+    public string CacheKey => throw new NotImplementedException();
+
+    public bool BypassCache => throw new NotImplementedException();
 
     public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, CreatedBrandResponse>
     {
@@ -35,9 +41,9 @@ public class CreateBrandCommand : IRequest<CreatedBrandResponse>
             Brand brand = _mapper.Map<Brand>(request);
             brand.Id = Guid.NewGuid();
 
-            var result = await _brandRepository.AddAsync(brand);
+            await _brandRepository.AddAsync(brand);
 
-            CreatedBrandResponse createdBrandResponse = _mapper.Map<CreatedBrandResponse>(result);
+            CreatedBrandResponse createdBrandResponse = _mapper.Map<CreatedBrandResponse>(brand);
             return createdBrandResponse;
         }
     }
