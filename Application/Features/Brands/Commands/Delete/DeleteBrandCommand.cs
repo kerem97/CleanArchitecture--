@@ -2,6 +2,7 @@
 using Application.Services.Repositories;
 using AutoMapper;
 using Core.Application.Pipelines.Caching;
+using Core.Application.Pipelines.Logging;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Brands.Commands.Delete;
 
-public class DeleteBrandCommand : IRequest<DeletedBrandResponse>, ICacheRemoverRequest
+public class DeleteBrandCommand : IRequest<DeletedBrandResponse>, ICacheRemoverRequest, ILoggableRequest
 {
     public Guid Id { get; set; }
 
